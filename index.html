@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>Trade Journal</title>
+
+<!-- PWA: manifest & theming -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0b0b0c">
+<meta name="background-color" content="#0b0b0c">
+<meta name="description" content="Jurnal trading pribadi dengan kalender, statistik performa, dan sinkronisasi Supabase">
+
+<!-- PWA: iOS support -->
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Trade Journal">
+
+<!-- PWA: favicon -->
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="title-block">
+      <h1>Trade Journal</h1>
+      <p id="subtitle">Memuat data...</p>
+      <div class="conn-status" id="connStatus"><span class="conn-dot"></span><span>Belum terhubung ke Supabase</span></div>
+    </div>
+    <div class="header-actions">
+      <button class="btn-add" id="btnAddTrade">+ Tambah trade</button>
+    </div>
+  </header>
+
+  <div class="status-banner" id="statusBanner"></div>
+
+  <div class="stats" id="statsRow"></div>
+
+  <div class="section-head">
+    <h2 id="calMonthTitle">Kalender</h2>
+    <div class="cal-nav">
+      <button id="prevMonth">‹</button>
+      <span class="cal-label" id="calLabel">-</span>
+      <button id="nextMonth">›</button>
+    </div>
+  </div>
+
+  <div class="calendar">
+    <div class="cal-weekdays">
+      <span>Sen</span><span>Sel</span><span>Rab</span><span>Kam</span><span>Jum</span><span>Sab</span><span>Min</span>
+    </div>
+    <div class="cal-grid" id="calGrid"></div>
+  </div>
+
+  <div class="day-panel" id="dayPanel" style="display:none;"></div>
+
+  <div class="section-head">
+    <h2>Rekap performa</h2>
+    <div class="period-tabs" id="periodTabs">
+      <button data-p="day" class="active">Harian</button>
+      <button data-p="week">Mingguan</button>
+      <button data-p="month">Bulanan</button>
+    </div>
+  </div>
+
+  <div class="table-scroll">
+    <table class="breakdown-table" id="breakdownTable">
+      <thead>
+        <tr>
+          <th data-k="period">Periode<span class="arrow"></span></th>
+          <th data-k="trades">Trade<span class="arrow"></span></th>
+          <th data-k="wins">Menang<span class="arrow"></span></th>
+          <th data-k="losses">Kalah<span class="arrow"></span></th>
+          <th data-k="wr">Win rate<span class="arrow"></span></th>
+          <th data-k="pnl">P/L<span class="arrow"></span></th>
+        </tr>
+      </thead>
+      <tbody id="breakdownBody"></tbody>
+    </table>
+  </div>
+
+  <div class="footnote">Data tersimpan otomatis di perangkat ini melalui memori artifact.</div>
+</div>
+
+<!-- Modal tambah/edit trade -->
+<div class="overlay" id="modalOverlay">
+  <div class="modal">
+    <h3 id="modalTitle">Tambah trade</h3>
+    <input type="hidden" id="editId">
+    <div class="field-row">
+      <div class="field">
+        <label>Tanggal</label>
+        <input type="date" id="fDate">
+      </div>
+      <div class="field">
+        <label>Pair / instrumen</label>
+        <input type="text" id="fPair" placeholder="cth. XAUUSD">
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>Risk : Reward</label>
+        <input type="text" id="fRR" placeholder="cth. 1:2">
+      </div>
+      <div class="field">
+        <label>Satuan (opsional)</label>
+        <input type="text" id="fUnit" placeholder="cth. USD, %, pips">
+      </div>
+    </div>
+    <div class="field">
+      <label>Profit / Loss</label>
+      <input type="number" step="any" id="fPnl" placeholder="cth. 150000 atau -75000">
+      <div class="pnl-hint" id="pnlHint"></div>
+    </div>
+    <div class="field">
+      <label>Catatan (opsional)</label>
+      <textarea id="fNotes" placeholder="Alasan entry, evaluasi, dsb."></textarea>
+    </div>
+    <div class="field">
+      <label>Screenshot chart (opsional)</label>
+      <div id="imgArea">
+        <div class="img-drop" id="imgDrop">
+          Ketuk untuk unggah gambar
+          <input type="file" id="fImage" accept="image/*">
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" id="btnCancel">Batal</button>
+      <button class="btn-save" id="btnSave">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<div class="lightbox" id="lightbox"><img id="lightboxImg" src=""></div>
+<script src="js/app.js"></script>
+
+<!-- PWA: registrasi service worker -->
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js').catch((err) => {
+        console.error('Gagal mendaftarkan service worker:', err);
+      });
+    });
+  }
+</script>
+</body>
+</html>
