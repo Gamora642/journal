@@ -28,8 +28,8 @@ function parseRR(rr){
 }
 
 // ---------- Koneksi Supabase ----------
-const SUPABASE_URL = '#';
-const SUPABASE_ANON_KEY = '#';
+const SUPABASE_URL = 'https://dshhehcygmzmicrdaqra.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRzaGhlaGN5Z216bWljcmRhcXJhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk1OTk0NzUsImV4cCI6MjEwNTE3NTQ3NX0._q3oSEbLk1JskKPUFaDCW1WQd2Z2iuxw2Fsjg4QF6mo';
 
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
