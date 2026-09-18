@@ -106,7 +106,7 @@ function renderStats(){
   el.innerHTML = `
     <div class="stat-cell"><div class="val">${trades.length}</div><div class="lbl">Total trade</div></div>
     <div class="stat-cell"><div class="val">${wr.toFixed(1)}%</div><div class="lbl">Win rate</div></div>
-    <div class="stat-cell"><div class="val ${totalPnl>0?'profit':(totalPnl<0?'loss':'')}">${fmtNum(totalPnl)}</div><div class="lbl">Total P/L</div></div>
+    <div class="stat-cell"><div class="val ${totalPnl>0?'profit':(totalPnl<0?'loss':'')}">${fmtNum(totalPnl)}$</div><div class="lbl">Total P/L</div></div>
     <div class="stat-cell"><div class="val">${avgRR!==null ? '1:'+avgRR.toFixed(2) : '-'}</div><div class="lbl">Rata-rata RR</div></div>
   `;
   document.getElementById('subtitle').textContent = trades.length
@@ -152,7 +152,7 @@ function renderCalendar(){
 
     let pnlHtml = '';
     if(dayTrades.length){
-      pnlHtml = `<div class="cal-pnl ${dayPnl>=0?'profit':'loss'}">${fmtNum(dayPnl)}</div>`;
+      pnlHtml = `<div class="cal-pnl ${dayPnl>=0?'profit':'loss'}">${fmtNum(dayPnl)}$</div>`;
     }
     cell.innerHTML = `
       <span class="daynum">${d}</span>
@@ -323,7 +323,7 @@ function renderBreakdown(){
       <td>${g.wins}</td>
       <td>${g.losses}</td>
       <td>${g.wr.toFixed(1)}%</td>
-      <td style="color:${g.pnl>0?'var(--profit)':(g.pnl<0?'var(--loss)':'var(--text)')}">${fmtNum(g.pnl)}</td>
+      <td style="color:${g.pnl>0?'var(--profit)':(g.pnl<0?'var(--loss)':'var(--text)')}">${fmtNum(g.pnl)}$</td>
     </tr>
   `).join('');
 
